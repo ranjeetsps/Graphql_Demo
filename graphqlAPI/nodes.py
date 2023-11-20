@@ -12,22 +12,27 @@ class UserProfileNode(DjangoObjectType):
     class Meta:
         model = UserProfile
         fields = '__all__'
+        interfaces = (relay.Node,)
 
 
 class UsersNode(DjangoObjectType):
     class Meta:
         model = User
         fields =('id', 'first_name', 'last_name', 'username', 'password', 'email', 'user_profile')
+        interfaces = (relay.Node,)
     
 
 class PostNode(DjangoObjectType):
     class Meta:
         model = Post
         fields = "__all__"
+        interfaces = (relay.Node,)
 
 
 class PostLikeNode(DjangoObjectType):
     class Meta:
         model = PostLike
         fields = "__all__"
+        interfaces = (relay.Node,)
+
 

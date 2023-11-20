@@ -3,10 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from restAPI.serializers import UserSerializer, PostLikeSerializer, PostSerializer
+from restAPI.serializers import UserSerializer, PostLikeSerializer, PostSerializer, ListPostSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated
-from restAPI.pagination import ListUsersPagination
+from restAPI.pagination import ListUsersPagination, ListPostsPagination
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from restAPI.models import Post, PostLike
@@ -128,3 +128,19 @@ class LikePostView(APIView):
             return Response(like_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class ListPostsView(APIView):
+    permission_classes = [IsAuthenticated]
+    pagination_class = ListPostsPagination
+
+    def get(self, request):
+        try:
+            queryset = Post.objects.all()
+            paginator = ListPostsPagination()
+            paginated_queryset = paginator.paginate_queryset(queryset, request)
+
+            serializer = ListPostSerializer(paginated_queryset, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Exception as e:
+            return Response({'errors': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

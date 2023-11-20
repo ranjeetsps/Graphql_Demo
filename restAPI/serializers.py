@@ -61,3 +61,11 @@ class PostLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostLike
         fields = '__all__'
+
+    
+class ListPostSerializer(serializers.ModelSerializer):
+    
+    user = UserSerializer()
+    class Meta:
+        model = Post
+        fields = "__all__"

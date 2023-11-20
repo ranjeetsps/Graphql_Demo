@@ -59,33 +59,22 @@ class UpdateUserWithProfileMutation(graphene.Mutation):
     @login_required
     def mutate(cls, root, info, user_id, **kwargs):
         user = User.objects.get(id=user_id)
-        user_profile = UserProfile.objects.get(user=user)
 
-        # user.username = kwargs.get('username',user.username)
-        # user.save
-
-        data = {
-            'username' : kwargs.get('username',None),
-            'user_profile':{
-                "bio" : kwargs.get('bio',None),
-                "city" : kwargs.get('city',None),
-                "state" : kwargs.get('state',None),
-                "pincode": kwargs.get('pincode',None),
-                "address": kwargs.get("address",None),
-                "contact": kwargs.get("contact",None),
-            }
-        }
+        data = {'user_profile':{}}
+        for key,value in kwargs.items():
+            if key == "username":
+                data[key] = value
+            else:
+                data['user_profile'][key] = value
+        print(data)
         serializer = UserSerializer(instance=user, data=data, partial=True)
 
         if serializer.is_valid():
-            print(111)
-            ab = serializer.save()
-            print(ab)
-            print(serializer.data)
+            serializer.save()
             return UpdateUserWithProfileMutation(user=user)
         else:
             print(serializer.errors)
-            return UpdateUserWithProfileMutation(user=None)
+            return UpdateUserWithProfileMutation(user=serializer.errors)
         
 
 class CreatePostMutation(graphene.Mutation):

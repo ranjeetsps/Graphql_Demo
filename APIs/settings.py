@@ -80,10 +80,21 @@ WSGI_APPLICATION = 'APIs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'graphql',
+        'USER': 'ajay',
+        'PASSWORD': 'ajaysihag',
+        'HOST': 'localhost',  # Set to the host where your MySQL server is running
+        'PORT': '3306',
     }
 }
 
